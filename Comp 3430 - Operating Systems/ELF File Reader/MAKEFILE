@@ -1,0 +1,4 @@
+all:
+	clang -Wall -Wpedantic -Wextra -Werror elf.c -o elf
+clean:
+	rm -f elf
