@@ -1,11 +1,11 @@
-#Assignment 2
+
 ## Marginal At Best Shell
-#### Ryan Dotzlaw - 7881954
+#### Ryan Dotzlaw
 
 ## Compilation
-####Run *'make'* to compile all the binaries.
+#### Run *'make'* to compile all the binaries.
 
-####Run *'make clean'* to clean up all the compiled binaries.
+#### Run *'make clean'* to clean up all the compiled binaries.
 
 ## Execution
 To execute the program, run:
@@ -17,7 +17,7 @@ Where [input file name] is the name of the file containing all the shell command
 
 
 ## Code Layout
-###Core Functions
+### Core Functions
 #### Main
 The main function is just a loop, grabbing a single line from the input file, and passing it to the parse function.
 After the line has been executed, this function will send kill signals to all created processes, because some seem to stick around, even after successful execution.
