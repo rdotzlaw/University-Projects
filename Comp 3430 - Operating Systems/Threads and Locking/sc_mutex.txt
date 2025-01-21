@@ -1,0 +1,91 @@
+execve("./mutex-lock", ["./mutex-lock"], 0x7ffd50a83710 /* 56 vars */) = 0
+brk(NULL)                               = 0x1ea8000
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f701634a000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/usr/lib64/openmpi/lib/tls/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/lib64/openmpi/lib/tls/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/openmpi/lib/tls/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/lib64/openmpi/lib/tls", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/openmpi/lib/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/lib64/openmpi/lib/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/lib64/openmpi/lib/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/lib64/openmpi/lib", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+open("/opt/rh/llvm-toolset-7.0/root/usr/lib64/tls/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/opt/rh/llvm-toolset-7.0/root/usr/lib64/tls/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/opt/rh/llvm-toolset-7.0/root/usr/lib64/tls/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/opt/rh/llvm-toolset-7.0/root/usr/lib64/tls", {st_mode=S_IFDIR|0555, st_size=4096, ...}) = 0
+open("/opt/rh/llvm-toolset-7.0/root/usr/lib64/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/opt/rh/llvm-toolset-7.0/root/usr/lib64/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/opt/rh/llvm-toolset-7.0/root/usr/lib64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/opt/rh/llvm-toolset-7.0/root/usr/lib64", {st_mode=S_IFDIR|0555, st_size=12288, ...}) = 0
+open("/usr/local/cuda/nvvm/lib64/tls/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/nvvm/lib64/tls/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/nvvm/lib64/tls/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/nvvm/lib64/tls", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/nvvm/lib64/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/nvvm/lib64/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/nvvm/lib64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/nvvm/lib64", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+open("/usr/local/cuda/lib64/tls/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/lib64/tls/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/lib64/tls/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/lib64/tls", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/lib64/x86_64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/lib64/x86_64", 0x7ffe29287d00) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/lib64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+stat("/usr/local/cuda/lib64", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=165962, ...}) = 0
+mmap(NULL, 165962, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f7016321000
+close(3)                                = 0
+open("/lib64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\200m\0\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=142144, ...}) = 0
+mmap(NULL, 2208904, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f7015f0e000
+mprotect(0x7f7015f25000, 2093056, PROT_NONE) = 0
+mmap(0x7f7016124000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x16000) = 0x7f7016124000
+mmap(0x7f7016126000, 13448, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f7016126000
+close(3)                                = 0
+open("/usr/lib64/openmpi/lib/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/opt/rh/llvm-toolset-7.0/root/usr/lib64/tls/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/opt/rh/llvm-toolset-7.0/root/usr/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/nvvm/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/usr/local/cuda/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0`&\2\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=2156272, ...}) = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f7016320000
+mmap(NULL, 3985920, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f7015b40000
+mprotect(0x7f7015d04000, 2093056, PROT_NONE) = 0
+mmap(0x7f7015f03000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c3000) = 0x7f7015f03000
+mmap(0x7f7015f09000, 16896, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f7015f09000
+close(3)                                = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f701631e000
+arch_prctl(ARCH_SET_FS, 0x7f701631e740) = 0
+mprotect(0x7f7015f03000, 16384, PROT_READ) = 0
+mprotect(0x7f7016124000, 4096, PROT_READ) = 0
+mprotect(0x600000, 4096, PROT_READ)     = 0
+mprotect(0x7f701634b000, 4096, PROT_READ) = 0
+munmap(0x7f7016321000, 165962)          = 0
+set_tid_address(0x7f701631ea10)         = 30097
+set_robust_list(0x7f701631ea20, 24)     = 0
+rt_sigaction(SIGRTMIN, {sa_handler=0x7f7015f14860, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7f7015f1d630}, NULL, 8) = 0
+rt_sigaction(SIGRT_1, {sa_handler=0x7f7015f148f0, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f7015f1d630}, NULL, 8) = 0
+rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+brk(NULL)                               = 0x1ea8000
+brk(0x1ec9000)                          = 0x1ec9000
+brk(NULL)                               = 0x1ec9000
+mmap(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7f701533f000
+mprotect(0x7f701533f000, 4096, PROT_NONE) = 0
+clone(child_stack=0x7f7015b3efb0, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0x7f7015b3f9d0, tls=0x7f7015b3f700, child_tidptr=0x7f7015b3f9d0) = 30098
+mmap(NULL, 8392704, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7f7014b3e000
+mprotect(0x7f7014b3e000, 4096, PROT_NONE) = 0
+clone(child_stack=0x7f701533dfb0, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0x7f701533e9d0, tls=0x7f701533e700, child_tidptr=0x7f701533e9d0) = 30099
+futex(0x7f7015b3f9d0, FUTEX_WAIT, 30098, NULL) = 0
+futex(0x7f701533e9d0, FUTEX_WAIT, 30099, NULL) = 0
+fstat(1, {st_mode=S_IFREG|0600, st_size=0, ...}) = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f7016348000
+write(1, "Counter is 200000000\n", 21)  = 21
+exit_group(0)                           = ?
++++ exited with 0 +++
