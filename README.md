@@ -1,4 +1,4 @@
-# University Projectes
+# University Projects
 
 This is a collection of projects and assignments I did while getting my CS bachelor's degree at the University of Manitoba
 
