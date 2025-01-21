@@ -1,0 +1,100 @@
+io_task_0 3 1856 96
+med_task_0 1 4922 42
+med_task_1 1 3932 52
+short_task_0 0 1071 49
+io_task_1 3 7461 95
+short_task_1 0 1240 18
+short_task_2 0 1032 19
+short_task_3 0 1575 31
+io_task_2 3 11325 85
+DELAY 164
+io_task_3 3 49952 69
+long_task_0 2 16820 49
+io_task_4 3 49118 76
+io_task_5 3 29426 67
+med_task_2 1 2100 38
+short_task_4 0 1323 17
+io_task_6 3 5094 57
+long_task_1 2 49750 45
+long_task_2 2 36414 42
+long_task_3 2 32294 53
+io_task_7 3 41643 91
+long_task_4 2 31915 30
+med_task_3 1 3545 30
+med_task_4 1 2096 47
+short_task_5 0 1197 24
+io_task_8 3 5911 75
+short_task_6 0 1964 48
+short_task_7 0 792 22
+io_task_9 3 21322 54
+med_task_5 1 4499 22
+long_task_5 2 39159 30
+med_task_6 1 3345 38
+med_task_7 1 4788 58
+long_task_6 2 37666 48
+long_task_7 2 27285 44
+long_task_8 2 38897 35
+short_task_8 0 362 15
+io_task_10 3 44460 77
+long_task_9 2 41788 52
+io_task_11 3 48786 80
+short_task_9 0 1587 24
+long_task_10 2 16706 41
+med_task_8 1 3380 40
+io_task_12 3 12220 89
+med_task_9 1 4340 57
+DELAY 226
+io_task_13 3 15478 58
+med_task_10 1 2523 44
+io_task_14 3 22342 87
+DELAY 716
+io_task_15 3 38607 76
+long_task_11 2 21334 35
+io_task_16 3 29332 95
+io_task_17 3 13540 65
+short_task_10 0 501 38
+med_task_11 1 4938 21
+long_task_12 2 27719 51
+long_task_13 2 11292 43
+long_task_14 2 12111 38
+long_task_15 2 19951 48
+long_task_16 2 27571 31
+DELAY 184
+med_task_12 1 3562 32
+io_task_18 3 3373 99
+med_task_13 1 2783 42
+long_task_17 2 20208 60
+short_task_11 0 657 27
+short_task_12 0 157 50
+DELAY 699
+med_task_14 1 3401 22
+short_task_13 0 120 15
+med_task_15 1 3268 50
+io_task_19 3 24618 71
+short_task_14 0 1883 21
+io_task_20 3 14646 50
+DELAY 498
+DELAY 609
+long_task_18 2 42039 37
+io_task_21 3 45890 60
+short_task_15 0 1643 19
+short_task_16 0 521 16
+short_task_17 0 1558 25
+long_task_19 2 19508 30
+long_task_20 2 9503 57
+med_task_16 1 2999 36
+io_task_22 3 17599 92
+DELAY 502
+long_task_21 2 28405 59
+short_task_18 0 1754 13
+io_task_23 3 45164 59
+DELAY 882
+med_task_17 1 3255 50
+short_task_19 0 1743 39
+DELAY 317
+short_task_20 0 1201 23
+io_task_24 3 42378 69
+DELAY 957
+io_task_25 3 4539 69
+io_task_26 3 14629 53
+long_task_22 2 7261 46

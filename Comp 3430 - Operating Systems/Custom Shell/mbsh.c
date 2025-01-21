@@ -1,9 +1,7 @@
 // Marginal at Best Shell
 //-----------------------------------------
 // NAME: Ryan Dotzlaw
-// STUDENT NUMBER: 7881954
 // COURSE: COMP 3430, SECTION: A02
-// INSTRUCTOR: Franklin Bristow
 // ASSIGNMENT: 2
 //
 // REMARKS: The marginal at best shell
