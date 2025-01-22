@@ -1,0 +1,131 @@
+---
+output: html_document
+date: "2023-11-03"
+name: "Ryan Dotzlaw"
+---
+
+#### Ryan Dotzlaw
+
+```{r}
+if (!require("igraph")) {
+    install.packages("igraph")
+    library(igraph)
+}
+```
+
+
+##### Q2
+
+(i,j), i != j in E if:
+1. i + j in S
+2. | i - j | in S
+
+Generate graph using input vertex set
+```{r}
+# list search function, could use sapply or smth
+# returns true if val is in list, else returns false
+is_in = function(val, list){
+  for(i in 1:length(list)){
+    if(val == list[i]){
+      return(TRUE)
+    }
+  }
+  return(FALSE)
+}
+
+q2 = function(v){
+  index = 1
+  e = c()
+  # loop through each vertex
+  for(i in 1:length(v)){
+    # check all the other vertex
+    for(j in 1:length(v)){
+      # if not the same vertex, and conditions 1 or 2 are True
+      if(v[i] != v[j] & ( is_in((v[i]+v[j]),v) | is_in(abs(v[i]-v[j]),v))){
+        # add to edge list
+        e[index] = as.character(v[i])
+        e[index+1] = as.character(v[j])
+        index = index + 2
+      }
+    }
+  }
+  # generate graph
+  g = make_graph(e,directed = FALSE)
+  plot(g)
+}
+```
+
+```{r}
+q2(c(2,3,4,7,11,13))
+```
+
+##### Q3
+
+Given a set of vertices, A, and another set S
+
+There exists an arc between vertices i,j in V if j-i in S and i != j
+
+```{r}
+q3 = function(A,S){
+  index = 1
+  e = c()
+  # loop through each vertex
+  for(i in 1:length(A)){
+    # check all the other vertex
+    for(j in 1:length(A)){
+      # if not the same vertex, and A[j]-A[i] in S
+      if(A[i] != A[j] & is_in(A[j]-A[i],S)){
+        # add to edge list
+        e[index] = as.character(A[i])
+        e[index+1] = as.character(A[j])
+        index = index + 2
+      }
+    }
+  }
+  # generate graph
+  g = make_graph(e,directed = TRUE)
+  plot(g)
+}
+```
+
+
+```{r}
+q3(c(0,1,2,3,4), c(-2,1,2,4))
+```
+
+##### Q4
+
+Given vertex set 'v',
+
+Arc (i,j) exists if i!=j and j is a multiple of i
+
+(so, j % i == 0)
+
+```{r}
+q4 = function(v){
+  index = 1
+  e = c()
+  # loop through each vertex
+  for(i in 1:length(v)){
+    # check all the other vertex
+    for(j in 1:length(v)){
+      # if not the same vertex, and conditions 1 or 2 are True
+      if(v[i] != v[j] & v[j]%%v[i] == 0){
+        # add to edge list
+        e[index] = as.character(v[i])
+        e[index+1] = as.character(v[j])
+        index = index + 2
+      }
+    }
+  }
+  # generate graph
+  g = make_graph(e,directed = TRUE)
+  plot(g)
+}
+```
+
+
+```{r}
+q4(c(-3,3,6,12))
+```
+

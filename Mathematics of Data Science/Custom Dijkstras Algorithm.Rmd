@@ -1,0 +1,121 @@
+---
+output: html_document
+date: "2023-11-09"
+name: "Ryan Dotzlaw"
+---
+
+### Ryan Dotzlaw
+
+Implement Dijkstra's Algorithm, then verify it's accuracy w/ igraph's implementation
+
+```{r}
+# regular min() will just get the min distance, not the associated vertex
+# return the v w/ min dist in Q
+get_min = function(Q, dist){
+  d = Inf
+  v = NA
+  for(i in 1:length(Q)){
+    if(as.numeric(dist[1, as.character(Q[i])]) < d){ # new smallest distance
+      v = as.character(Q[i])
+      d = dist[1,as.character(Q[i])]
+    }
+  }
+  return(v)
+}
+
+# return 'Q' without 'u'
+del = function(Q, u){
+  new_Q = list()
+  pos = 1
+  for(i in 1:length(Q)){
+    if(as.character(Q[i]) != u){
+      # add the element to new_Q
+      new_Q[pos] = Q[i]
+      pos = pos + 1
+    } # else, is 'u', don't add
+  }
+  return(new_Q)
+}
+
+# get the neighbors of 'u' in the graph 'G' that are still in 'Q'
+get_neighbors = function(G, u, Q){
+  n = neighbors(G, u)
+  res = list()
+  pos = 1
+  # for each element in Q
+  for(i in 1:length(Q)){
+    # check if it's one of the neighbors
+    for(v in n$name){
+      if(as.character(Q[i]) == v){
+        # is neighbor
+        res[pos] = v
+        pos = pos + 1
+      }
+    }
+  }
+  return(res)
+}
+
+# Dijkstra's algorithm
+dijkstra = function(G, start){
+  # set up
+  Q = list()
+  # n x 1 data frames
+  dist = data.frame(row.names=V(G)$name)
+  prev = data.frame(row.names=V(G)$name)
+  for(v in V(G)$name){
+    dist[1,v] = Inf
+    prev[1,v] = NA
+    Q[length(Q) + 1] = v
+  }
+  # initial value
+  dist[1,start] = 0
+  # until Q is empty
+  while(length(Q) > 0){
+    u = get_min(Q, dist)
+    Q = del(Q, u)
+    # if Q is empty, then 'u' is the last element
+    if(length(Q) != 0){
+      n = get_neighbors(G, u, Q)
+      for(v in n){
+        alt = dist[1,u] + 1 # distance between neighbors is 1, since edges un-weighted
+        if(alt < dist[1,v]){
+          dist[1,v] = alt
+          prev[1,v] = u
+        }
+      }
+    }
+    
+  }
+  return(data.frame(c(dist, prev)))
+}
+```
+
+```{r}
+# set up Q2 graph
+edges2 = c("x1", "x2",
+           "x2", "x1",
+           "x2", "x3",
+           "x2", "x4",
+           "x3", "x6",
+           "x4", "x3",
+           "x6", "x5",
+           "x5", "x1")
+G2 = make_graph(edges2, directed = TRUE)
+plot(G2)
+res = dijkstra(G2, "x1")
+# the distances are:
+res[1,1:6]
+# the previous nodes are:
+res[1,7:12]
+```
+Comparing the results to igraph's Dijkstra's algorithm implementation...
+
+```{r}
+# the paths from 'x1' to any other node is:
+shortest_paths(G2, "x1", algorithm = "dijkstra")$vpath
+# the distances from 'x1' to the other nodes are:
+distances(G2, algorithm = "dijkstra", mode = "in")[,1]
+```
+We can see that the results are the same.
+

@@ -1,0 +1,297 @@
+---
+output: html_document
+date: "2023-11-21"
+name: "Ryan Dotzlaw"
+---
+
+### Ryan Dotzlaw
+
+#### Plotting the Graph
+
+Start by adding the required packages.
+
+```{r}
+# install required libraries
+if (!require("igraph")) {
+    install.packages("igraph")
+    library(igraph)
+}
+if (!require("igraphdata")) {
+    install.packages("igraphdata")
+    library(igraphdata)
+}
+```
+
+Then, we can get our data from the 'igraphdata' package for use with 'igraph'
+
+```{r}
+# load the data into 'UKfaculty' variable
+data(UKfaculty, package="igraphdata")
+# listen to the warning given
+G = upgrade_graph(UKfaculty)
+```
+The data 'UKfaculty' consists of 81 nodes, each representing a person at a UK university.
+
+Each node has a 'Group' attribute, which is an integer id for their school affiliation.
+
+There are a total of 817 edges, each with a weight.
+
+The weight of each edge represents the 'closeness' of the friendship between two faculty members, so lower 'weight' means the two are better friends.
+
+Each edge is directed, since a friendship could be one-sided.
+
+It would be helpful to encode more information into the graph, instead of just nodes and edges.
+
+Lets encode the 'Group' attribute into the vertices' color.
+
+```{r}
+# loop through all the vertices
+for(i in c(1:length(V(G)))){
+  # set the vertex color based on 'Group'
+  if(V(G)[i]$Group == 1){
+    V(G)[i]$color = "white"
+  } else if(V(G)[i]$Group == 2){
+    V(G)[i]$color = "lightgreen"
+  } else if(V(G)[i]$Group == 3){
+    V(G)[i]$color = "lightblue"
+  } else if(V(G)[i]$Group == 4){
+    V(G)[i]$color = "lightpink"
+  } 
+}
+```
+
+After that, we can plot the graph.
+
+```{r}
+plt = function(G, log=TRUE){
+  # reduce the margin size
+  par(mar=c(0,0,0,0)+.1)
+  
+  # consistent graph generation
+  # doesn't change community structure for later analysis
+  set.seed(7881954)
+  # plot the graph with some layout changes to prevent it from being a ball of vertices on top of each other.
+  plot(G, layout=layout_with_fr(G), # use force-directed graph drawing to minimize crossing edges, and place similar edge lengths nearby
+       asp=1, edge.arrow.size=0.5, edge.arrow.width=1, vertex.size=10, # now some coloring to encode more info into the graph
+       vertex.color=V(G)$color, vertex.label.color="black")
+  # create a legend for the different node colors/groups
+  if(log){
+    legend(x = 1, y = 1.1, xjust = 0.5, ncol = 2, c("Group 1", "Group 2", "Group 3", "Group 4"),
+        pch = 21, , pt.cex = 1.5,
+        col = "black", pt.bg = c("white", "lightgreen", "lightblue", "lightpink"))
+  }
+}
+```
+
+```{r}
+plt(G)
+```
+
+
+#### Analyzing Plotted Graph
+
+From this graph, we can see three general communities form based on the faculty members 'Group' attribute.
+
+While there are friendships between groups, its clear to see that in general the members of one group are more friendly with other members of their group, instead of members of another group.
+
+Additionally, we can see that the members of Group 1 and Group 2 are much closer to the members of their own group, compared to the members of Group 3 which are not as close with each other.
+
+Next we can see that in general, Group 1 and Group 2 are much more friendly with the members of the other group (Group 2 and Group 1 respectively) than they are with members of Group 3.
+
+Also, members of Group 4 are friendly enough with Group 1 (and vice versa) for Group 4 to be included in Group 1's 'community'.
+
+Finally, there are some outliers: like node 62, which is more friendly with Groups 1 and 4 than with their own group (Group 3), and node 11 which isn't part of their groups community, only having 2 distant friendships.
+
+#### Mathematical Analysis
+
+Now that we've analyzed the graph's structure when plotting it, it's time to perform some mathematical analysis on it's structure.
+
+First, lets start with the graph's center, AKA the list of nodes in G with the lowest eccentricity (radius).
+
+```{r}
+# init list
+center = list()
+# loop through all nodes
+for(i in V(G)){
+  # if current node has lowest possible eccentricity in G
+  if(eccentricity(G)[i] == radius(G)){
+    # it's a center node, add to list
+    center[length(center) + 1] = i
+  }
+}
+# the number of center nodes is
+length(center)
+# the center nodes are:
+# to print w/out weird [[i]] stuff
+for(i in c(1:length(center))){
+  print(center[[i]])
+}
+# with an eccentricity/radius of 
+radius(G)
+```
+
+So there's a total of 61 center nodes, each with an eccentricity of 3.
+
+That means that 61 people in the faculty have at most 3 degrees of separation from all the other faculty members.
+
+In terms of the relationships defined by the edges: for any faculty member that is also a center node, the list of the center node's friends, the friends of the center node's friends, and the friends of the friends of the center node's friends all combined will be the set of all faculty members.
+
+```{r}
+max(eccentricity(G))
+```
+
+Since the max eccentricity is 4, for all 81 nodes there will be at most 4 degrees of separation from all the other faculty members.
+
+
+
+Next we can look at betweenness, a centrality measure for graphs.
+
+Betweenness for a vertex 'v' is calculated as the sum of fractions, where each fraction is the sum of shortest paths from vertex 's' to 't' (s != v != t) that pass through vertex 'v', divided by the sum of shortest paths from 's' to 't' that don't pass through 'v'.
+
+Overall, this gives a measure of what vertices are included in more shortest paths compared to others, giving a measure of what vertices are near the 'center' of the graph.
+
+```{r}
+# order returns indices
+# pass these indices to V(G) to sort V(G) by betweenness descending
+V(G)[order(betweenness(G, normalized = TRUE, directed=TRUE), decreasing = TRUE)]
+```
+So using betweenness as a centrality measure, the 'center' of the graph is node 37.
+
+That means that node 37 is in the most shortest paths from any other two nodes.
+
+In the context of the faculty members, since node 37 is in more shortest paths, this means that node 37 probably has 'closer' (lower edge weight) friendships with other faculty members in general, or that their collection of friends are 'closer' comparatively.
+
+
+
+Next, we can look at closeness, another centrality measure.
+
+Closeness for a vertex 'v' is the mean distance between 'v' and all other vertices that 'v' is connected with.
+
+```{r}
+# order returns indices
+# pass these indices to V(G) to sort V(G) by closeness descending
+V(G)[order(closeness(G, mode="all", normalized = TRUE), decreasing = TRUE)]
+```
+Here we can see that node 37 is also the graphs 'center' when using closeness as a centrality measure.
+
+This tracks with what we concluded when measuring betweenness.
+
+With betweenness we concluded that node 37 was in the most shortest paths between any two nodes, then it follows that the path from most nodes to node 37 will be the shortest path, leading to node 37 having the 'closest' mean distance between itself and any other vertex.
+
+
+
+Next let's look at periphery.
+
+The periphery of our graph is the nodes that have the maximum eccentricity.
+
+```{r}
+# graph vertices whose eccentricity is the max value for G
+V(G)[eccentricity(G)==max(eccentricity(G))]
+```
+
+In the context of the faculty members, a person on the periphery of the graph would be someone who isn't as 'friendly' and whose friends would be less 'friendly'
+
+
+Next let's look at the graph's girth.
+
+The girth of a graph is the length of the shortest possible cycle.
+
+This most likely will be 2 for the faculty graph, so long as there are two people who are mutually friends
+
+```{r}
+girth(G)
+```
+I have no idea why it says 3, since this can easliy be shown as incorrect.
+
+As we can see from the following:
+
+```{r}
+E(G)[.from(1)]
+E(G)[.to(1)]
+```
+
+In 'G' there are the edges '1->4' and '4->1', meaning the shortest cycle in 'G' is of length 2 not 3.
+
+So the girth of 'G' is 2, and there is at least one mutual friendship among the faculty members.
+
+
+Now lets look at the degree distribution of our graph.
+
+The degree distribution does exactly what you'd expect, it creates a distribution based on the percentage chance that any given vertex will have the associated degree.
+
+```{r}
+dd = degree_distribution(G)*100
+plot(dd, ylab="% Chance for Degree", xlab="Vertex Degree")
+as.data.frame(dd)
+```
+
+*Note: degree_distribution starts at degree 0, so % chance of degree 'deg' is dd[deg+1]*
+
+From this we can see several things:
+
+- Faculty members have the highest chance of being friends with 10 people.
+```{r}
+V(G)[degree(G) == 10]
+```
+- There is no faculty member with no friends.
+```{r}
+V(G)[degree(G) == 0]
+```
+- The highest number of friends any faculty member has is 62.
+```{r}
+max(degree(G)) == 62
+V(G)[degree(G) == max(degree(G))]
+```
+- The lowest number of friends any faculty member has is 2.
+```{r}
+min(degree(G)) == 2
+V(G)[degree(G) == min(degree(G))]
+```
+
+Now lets look at graph density.
+
+Graph density measures how many edges are there in the graph compared to how many there could possibly be.
+
+With our graph of order 81 (number of vertices), it could have a total of 6480 edges (# vertices * (# vertices -1))
+
+So our graph density is:
+
+```{r}
+graph.density(G)
+```
+
+So that means, that of all the possible friendships all the faculty members could make with each other, only around 12.6% of them exist.
+
+Now let's look at the density of the different groups in the faculty
+
+```{r}
+s1 = induced_subgraph(G, V(G)$Group==1, impl="create_from_scratch")
+plt(s1,FALSE)
+graph.density(s1)
+```
+
+```{r}
+s2 = induced_subgraph(G, V(G)$Group==2, impl="create_from_scratch")
+plt(s2,FALSE)
+graph.density(s2)
+```
+
+```{r}
+s3 = induced_subgraph(G, V(G)$Group==3, impl="create_from_scratch")
+plt(s3,FALSE)
+graph.density(s3)
+```
+
+```{r}
+s4 = induced_subgraph(G, V(G)$Group==4, impl="create_from_scratch")
+plt(s4,FALSE)
+graph.density(s4)
+```
+
+From this, we can see that each group in the faculty is tighter knit than the faculty as a whole.
+
+*Relatively*, there are more friendships within a group than in the faculty as a whole.
+
+Additionally, Group 4 has the highest friendship density, but with only two members, that isn't particularly notable.
+
+The group with the second highest friendship density is Group 2, with around a 35.6% friendship density.

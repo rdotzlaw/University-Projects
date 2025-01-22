@@ -1,0 +1,287 @@
+---
+output: html_document
+date: "2023-10-19"
+name: "Ryan Dotzlaw"
+---
+
+
+### Ryan Dotzlaw
+
+#### Setup
+
+
+```{r}
+# grab the data
+full_data = read.csv(url("https://raw.githubusercontent.com/bnokoro/Data-Science/master/countries%20of%20the%20world.csv"))
+# all column names
+colnames(full_data)
+# make column names more usable
+c_names = c("country", "region", "pop", "area", "pop_density", "coastline_ratio", "migration", "infant_mortality", "gdp", "literacy", "phones", "arable", "crops", "other", "climate", "birthrate", "deathrate", "agri", "industry", "service")
+colnames(full_data) = c_names
+# many columns are just decimals as strings with a ',' instead of a '.'
+# if we don't fix this then there are only a few usable columns for PC calculation
+data = as.data.frame(lapply(full_data, function(y) as.numeric(gsub(",", ".", y))))
+# replace NA columns for country and region
+data$country = full_data$country
+data$region = full_data$region
+# there are some rows with NA values still, which we don't want, so remove them
+data = data[complete.cases(data),]
+# view the head
+head(data)
+# number of countries (incidentally, this is also the number of rows)
+length(unique(data$country))
+```
+#### Part 1: By 'Hand' Computation
+
+##### Firstly we need to center the data.
+
+This is done for the quantitative columns by taking the mean value of the entire column and subtracting that from the entire column.
+
+```{r}
+# firstly, center the data
+# we want to center all the quantitative data, so all except the 'country' and 'region' columns
+to_center = c("pop", "area", "pop_density", "coastline_ratio", "migration", "infant_mortality", "gdp", "literacy", "phones", "arable", "crops", "other", "climate", "birthrate", "deathrate", "agri", "industry", "service")
+# loop through list of columns to center
+for (c in to_center) {
+  # create new column name
+  c_name = sprintf("%s.c", c)
+  # calculate column mean
+  c_mean = mean(data[[c]])
+  # create new column of name 'c_name', that is the original column centered on '0'
+  data[[c_name]] = data[[c]] - c_mean
+}
+head(data)
+```
+
+
+##### Once all the columns are centered, we need to compute the covariance matrix.
+
+In the notes, the covariance between any two random variables is a linear combination of the two variable columns, times the reciprocal of their dimension (which is the same between both samples).
+
+Since we want to compute the covariance matrix, which is all possible covariances between all variables, we can get this by simply multiplying the transpose of our centered data matrix by itself.
+```{r}
+# now compute the covariance matrix
+# grab all the centered data
+c_data = as.matrix(data[, to_center])
+# covariance matrix is (1/dim) t(X) * X
+mat_cov = (1/dim(c_data)[1]) * t(c_data) %*% c_data
+# mat_cov is an 18 x 18 matrix holding all possible covariances between all variables
+as.data.frame(head(mat_cov))
+```
+##### Now compute eigenvalues of the covariance matrix
+
+```{r}
+eig = eigen(mat_cov)
+# order by decreasing eigenvalues
+ord = order(eig$values, decreasing = TRUE)
+eig$values = eig$values[ord]
+eig$vectors = eig$vectors[, ord]
+as.data.frame(eig$values)
+as.data.frame(eig$vectors)
+```
+##### Now compute the singular values
+
+From there, the singular values are just the square root of the eigenvalues
+
+```{r}
+eig$sing = sqrt(eig$values)
+as.data.frame(eig$sing)
+```
+##### Construct the basis
+
+Now we need to use our eigenvectors to construct a change of basis based on the highest singular value.
+
+Specifically, we construct a change of basis into a basis starting with the eigenvector associated with the highest singular value.
+
+Though, we can't just use the eigenvectors as they are, we want our new basis to be orthonormal.
+
+Having a normalized basis just makes things simpler, but there is a good reason for the basis to be orthogonal as well.
+
+By having the basis vectors orthogonal to each other, we are effectively constructing a basis from our eigenvectors only using the parts of the eigenvectors that are uncorrelated from each other.
+
+This leaves us with a basis that will describe our data only in terms of the parts that are uncorrelated from each other.
+
+To do this, we need to preform the Gram-Schmidt process on our matrix of eigenvectors.
+
+```{r}
+if (!require("pracma")) {
+    install.packages("pracma")
+    library(pracma)
+}
+gs = gramSchmidt(A=eig$vectors)
+as.data.frame(gs$Q)
+```
+
+```{r}
+# check for othonormality
+# sum all columns together and ensure they're all 1
+colSums(gs$Q[,1:dim(gs$Q)[1]]^2)
+# so all the columns of Q are normalized
+# now check if the columns are orthogonal
+round(t(gs$Q[,1]) %*% gs$Q[,2], 15)
+round(t(gs$Q[,7]) %*% gs$Q[,3], 15)
+round(t(gs$Q[,18]) %*% gs$Q[,10], 15)
+
+```
+##### Create a change of basis matrix
+
+Now Q is an orthonormal basis of our data set.
+
+So we need to find the change of basis matrix to convert our data into the new basis.
+
+Our data set is currently in the standard basis, so we can use the identity matrix when creating our change of basis matrix via RREF.
+
+```{r}
+# form an augmented matrix
+aug = cbind(gs$Q, diag(dim(gs$Q)[1]))
+# convert to RREF
+aug_r = rref(aug)
+# extract the second half of the matrix to get our change of basis matrix
+# take the columns starting from numcolumns(gs$Q)+1 to the end
+P = aug_r[, (dim(gs$Q)[1] + 1): dim(aug_r)[2]]
+
+```
+
+Alternatively, instead of using the RREF method above, we could just...
+
+```{r}
+P2 = solve(gs$Q)
+# there's some floating point imprecision, but measuring to the 13th digit is close enough for them to be equal.
+as.data.frame(round(P,13) == round(P2,13))
+```
+
+##### Perform a change of basis
+
+Now we have 'P', our change of basis matrix that will change the basis for the original data column vectors from the standard basis to our new, more useful basis.
+
+So lets do that.
+
+In general, for a change of basis, given basis 'B' and 'C', and change of basis matrix 'P' from basis 'B' to 'C'
+
+[X]C = P[X]B
+
+Where [X]C is X in the C basis, and [X]B is X in the B basis.
+
+So we need to multiply each column of our normalized data by 'P', or alternatively, we can just multiply the whole data matrix by 'P'
+
+```{r}
+new_data = as.data.frame(c_data %*% t(P))
+dim(new_data)
+head(new_data)
+```
+
+
+
+```{r}
+if (!require("devtools")) {
+    install.packages("devtools")
+    library(devtools)
+}
+if (!require("vqv/ggbiplot")) {
+    install_github("vqv/ggbiplot")
+    library(ggbiplot)
+}
+```
+
+```{r}
+# add the countries and regions back to the data
+new_data = cbind(data$region, new_data)
+new_data = cbind(data$country, new_data)
+colnames(new_data) = c_names
+head(new_data)
+```
+
+```{r}
+
+```
+
+Now here's some plots of the data in the new basis, to be blunt, I really have no idea what conclusions to draw from these plots other than the fact that there is very little correlation between the variables
+
+```{r}
+plot(new_data$pop, new_data$gdp, 
+    xlim=c(min(new_data$pop)- 100, max(new_data$pop)+100),
+    ylim=c(min(new_data$gdp)- 100, max(new_data$gdp)+100))
+```
+
+To contrast, here's the same data in the standard basis.
+
+```{r}
+c_data = as.data.frame(c_data)
+plot(c_data$pop, c_data$gdp, 
+    xlim=c(min(c_data$pop)- 100, max(c_data$pop)+100),
+    ylim=c(min(c_data$gdp)- 100, max(c_data$gdp) + 100))
+```
+
+The data in the new basis is clearly more 'flat' than the original, and the original data has a weak negative correlation between 'gdp' and 'pop', whereas the new data has practically none.
+
+Once more with other data...
+
+```{r}
+plot(new_data$pop, new_data$area, 
+    xlim=c(min(new_data$pop)- 100, max(new_data$pop)+100),
+    ylim=c(min(new_data$area)- 100, max(new_data$area)+100))
+```
+```{r}
+plot(c_data$pop, c_data$area, 
+    xlim=c(min(c_data$pop)- 100, max(c_data$pop)+100),
+    ylim=c(min(c_data$area)- 100, max(c_data$area)+100))
+```
+
+Here it almost looks like both plots are a reflection over the X-Axis, or rather, a negative vertical stretch of each other. 
+There are a few minute differences in the graphs, like how the new data has more points actually crossing the X-Axis, but both graphs look close enough to each other to be interesting.
+
+
+#### Part 2: Using 'prcomp' Function
+```{r}
+pca = prcomp(data[, to_center], scale = TRUE, center = TRUE)
+summary(pca)
+```
+
+
+```{r}
+ggbiplot(pca, groups = data$region, ellipse = TRUE)
+```
+
+This is pretty messy, and not really useful, so lets try trimming some of the data out, then trying again
+
+```{r}
+pca_data1 = as.data.frame(matrix(c(data$pop, data$area, data$pop_density, data$migration, data$gdp), nc=5, nr=length(data$pop)))
+colnames(pca_data1) = c("pop", "area", "pop_density", "migration", "gdp")
+pca2 = prcomp(pca_data1, scale = TRUE, center = TRUE)
+summary(pca2)
+```
+
+```{r}
+ggbiplot(pca2, groups = data$region)
+```
+
+
+This is more readable, especially without the ellipses.
+
+This graph gives us the projection of our variables onto the plane created by the 'PC1' and 'PC2' vectors.
+
+From this graph, we can easily see there's a relation between the vectors:
+
+- 'pop' and 'area'
+- 'gdp' and 'migration'
+- and to a lesser extent, 'pop_density' and 'gdp'/'migration'
+
+```{r}
+pca_data2 = as.data.frame(matrix(c(data$pop, data$gdp), nc=2, nr=length(data$pop)))
+colnames(pca_data2) = c("pop", "gdp")
+pca3 = prcomp(pca_data2, scale = TRUE, center = TRUE)
+summary(pca3)
+ggbiplot(pca3, groups = data$region, ellipse = TRUE)
+```
+
+With a further subset of our data, we can see a similar result, the lack of correlation between 'pop' and 'gdp', though with a rotation of ~45 degrees.
+
+But with a further reduced data set, it's easier to interpret the data points graphically, or rather, it's much easier to interpret the data points as a linear combination of the vectors on the graph.
+
+Some conclusions I've come to are:
+
+- Most Western Europe countries have a low population, but high GDP
+- There's one outlier North American country that has the highest GDP, and a higher than average population
+- There's two outlier Asian countries that have extremely high population.
+- Most countries are scattered close to the zero population vector, meaning there's less variance in country population.
+- There's much higher variance in GDP

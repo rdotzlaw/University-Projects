@@ -1,0 +1,223 @@
+---
+output: html_document
+date: "2023-10-06"
+name: "Ryan Dotzlaw"
+
+---
+
+
+### Ryan Dotzlaw
+
+#### Q1
+##### Consider the system of equations Ax=b, where:
+
+```{r}
+A = matrix(c(c(2,1,3,0,5),c(3,0,-2,3,0),c(2,-27,6,2,1)), nr=5, nc=3)
+A
+b = c(-1,2,0,1,-2)
+b
+```
+##### Find a QR factorization of A
+
+A QR factorization of 'A' consists of two matrices, 'Q' and 'R', where 'Q' is an orthonormal matrix consisting of the vectors generated from the Gram-Schmidt process, and where 'R' is an upper triangular matrix, with each entry 'x_ij' being the dot product between the vector 'e_i' from the Gram-Schmidt process, and the vector 'a_j' from the matrix 'A'
+
+
+Firstly, use the Gram-Schmidt process on 'A'
+
+```{r}
+# function for finding the norm of a vector (default function 'norm' was giving errors)
+normal = function(vec){
+  return(sqrt(sum(vec^2)))
+}
+
+# function for projecting 'x' onto 'v'
+project = function(x, v){
+  dot = x %*% v
+  nsqr = normal(v)^2
+  res = (dot / nsqr)
+  res = res * v
+  return(res)
+}
+
+# the matrix 'Q', same size as 'A', right now filled w/ 'NA'
+Q = matrix(nr=nrow(A), nc=ncol(A))
+
+# v1 is equal to the first column in 'A'
+v1 = A[,1]
+# v2 is equal to the second column in 'A', minus the projection of that column onto v1
+v2 = A[,2] - project(A[,2], v1)
+# v3 is equal to the third column in 'A', minus the projection of that column onto v1, and minus the projection of that column onto v2
+v3 = A[,3] - project(A[,3], v1) - project(A[,3], v2)
+
+# now normalize the vectors, and place into 'Q'
+Q[,1] = v1 / normal(v1)
+
+Q[,2] = v2 / normal(v2)
+Q[,3] = v3 / normal(v3)
+
+Q
+
+# from there, R = Q^T A, so
+R = round(t(Q) %*% A, 15)
+R
+
+# and you can get A from multiplying Q and R
+round(Q %*% R,15)
+
+# using the qr method...
+QR = qr(A)
+# gives the same result
+round(qr.Q(QR) %*% qr.R(QR), 15)
+
+
+```
+I would like to note, that above I rounded the calculation of R and A to the 15th digit due to the fact that the zero entries in R and A were instead +/-1e-16 instead of zero. But the fact that all the non-zero entries were correct led me to believe that it was just an error in the decimal arithmetic, so I just rounded the results.
+
+##### Now find the least squares solution
+
+The least squares solution using QR factorization is: x~ = R^-1 Q^T b
+
+```{r}
+
+# using my 'Q' and 'R'
+xtilde1 = solve(R) %*% t(Q) %*% b
+xtilde1
+
+A %*% xtilde1
+
+# using the 'qr' method
+xtilde2 = solve(qr.R(QR)) %*% t(qr.Q(QR)) %*% b
+xtilde2
+A %*% xtilde2
+
+```
+
+
+#### Q2
+
+##### Find the best approximation to a solution to the following system:
+* x + y - z = 2
+* -y + 2z = 6
+* 3x +2y - z = 11
+* -x + z = 0
+
+To find the best approximation, we need to find the 'x~' such that 'Ax~' is as close to 'b' as possible.
+
+This is pretty standard at this point, treat it as a least squares problem and solve for 'x~' using: x~ = inv(t(A)A)t(A)b
+
+```{r}
+# the system of equations can be represented by a matrix and a vector:
+
+# where each column in 'A' represents the coefficients of the x, y, and z variables
+A = matrix(c(c(1,0,3,-1), c(1,-1,2,0), c(-1,2,-1,1)), nc=3, nr=4)
+A
+
+# where 'b' is the values each equation is equal to
+b = c(2,6,11,0)
+b
+
+# solve for x~
+xtilde = solve(t(A) %*% A) %*% t(A) %*% b
+xtilde
+
+# see how close the solution is, if it wasn't an approximation this should give a zero vector
+A %*% xtilde - b
+
+
+```
+
+
+
+#### Q5 (GS computation only)
+
+##### Apply the Gram-Schmidt process to the basis of the subspace 'W' to obtain an orthonormal basis of 'W'
+
+The subspace 'W' is described as the span of the following vectors:
+
+```{r}
+x1 = c(1,2,-2,1)
+x1
+x2 = c(1,1,0,2)
+x2
+x3 = c(1,8,1,0)
+x3
+```
+
+Now to calculate the orthonormal basis of 'W'
+
+```{r}
+# u1 is just x1 normalized
+u1 = x1 / normal(x1)
+
+# v2 is x2 minus the projection of x2 onto x1
+v2 = x2 - project(x2, x1)
+# normalize, and round b/c there's a floating point error again
+u2 = round(v2 / normal(v2),15)
+
+# v3 is x3 minus the projection of x3 onto x1 and the projection of x3 onto x2
+v3 = x3 - project(x3, x1) - project(x3, x2)
+# normalize
+u3 = v3 / normal(v3)
+
+# so the orthonormal basis of 'W' is the following three vectors:
+u1
+u2
+u3
+
+```
+
+
+#### Q6
+
+##### Find an orthonormal basis for Real^3 that contains a vector parallel to:
+
+```{r}
+v1 = c(1,2,3)
+```
+
+Since the orthonormal basis must contain a vector parallel to 'v1', this means that the vector in the orthonormal basis is a scalar multiple of 'v1', logically if follows that this will be the normalized version of 'v1'
+
+```{r}
+u1 = v1 / normal(v1)
+u1
+```
+
+Next we need to find any other vector that is orthogonal to 'v1', such as:
+
+```{r}
+v2 = c(1,1,-1)
+v1 %*% v2
+```
+Since the dot product is zero, we know that these two vectors are orthogonal, additionally the projection of 'v2' onto 'v1' will be the zero vector due to this
+
+```{r}
+project(v2,v1)
+```
+So if we're applying the Gram-Schmidt process to 'v2', it will just result in 'v2'
+
+Now we can normalize 'v2'
+
+```{r}
+u2 = v2 / normal(v2)
+```
+
+Now we apply to Gram-Schmidt process to any vector to get one that is orthogonal to both 'v1' and 'v2'
+
+```{r}
+x3 = c(1,0,0)
+v3 = x3 - project(x3, v1) - project(x3, v2)
+v3
+
+# then normalize
+u3 = v3 / normal(v3)
+```
+Now we have an orthonormal basis for Real^3, that contains a vector parallel to 'v1' as follows:
+
+```{r}
+u1
+u2
+u3
+```
+
+
+

@@ -1,0 +1,258 @@
+---
+output: html_document
+date: "2023-10-24"
+name: "Ryan Dotzlaw"
+---
+
+
+#### Ryan Dotzlaw
+
+##### Write functions *deleted_row_sum* and *deleted_col_sum*
+
+Both functions will take a square matrix *M* of dim = n as a parameter and each will return a vector of all the row/col sums.
+
+Each row/col sum is the sum of the absolute values in the all the entries in the ith row/col excluding the 'deleted' ith entry.
+
+```{r}
+deleted_row_sum = function(M){
+  # ensure M is square
+  if(dim(M)[1] != dim(M)[2]){
+    # return error, quit function
+    stop("Matrix given is not square.")
+  }
+  # continue
+  # result is empty vector of size 'n x 1'
+  res = matrix(nr=dim(M)[1], nc=1)
+  for(i in 1:dim(M)[1]){
+    deleted_i = 0
+    # sum up all the values in ith row, excluding the ith value
+    # deleted_i = sum(abs(M[i])) - abs(M[i,i])
+    for(j in 1:dim(M)[1]){
+      if(j != i){
+        deleted_i = deleted_i + abs(M[i,j])
+      } # else to do nothing
+      res[i] = deleted_i
+    }
+  }
+  return(res)
+}
+```
+
+```{r}
+deleted_col_sum = function(M){
+  # ensure M is square
+  if(dim(M)[1] != dim(M)[2]){
+    # return error, quit function
+    stop("Matrix given is not square.")
+  }
+  # continue
+  # result is empty vector of size 'n x 1'
+  res = matrix(nr=dim(M)[1], nc=1)
+  for(i in 1:dim(M)[1]){
+    # sum up all the values in ith col, then cancel out ith value
+    deleted_i = 0
+    for(j in 1:dim(M)[1]){
+      if(j != i){
+        deleted_i = deleted_i + abs(M[j,i])
+      } # else to do nothing
+      res[i] = deleted_i
+    }
+    res[i] = deleted_i
+  }
+  return(res)
+}
+```
+
+##### Write function *gershgorin_disks*
+
+Takes a square matrix M
+
+Returns a 2-tuple of dataframes
+
+1 dataframe is row_disks, the other is col_disks, so return is c(row_disks, col_disks)
+
+both dataframes contain a column called 'center' containing the center coordinates of the disk
+and another column called 'radius' containing the radius of each disk.
+
+The center of each disk in row_disk or col_disk is the deleted ith value, specifically the values on the main diagonal.
+
+The radius of each disk is the deleted_row/col_sum associated with each center.
+
+```{r}
+gershgorin_disks = function(M){
+  # ensure M is square
+  if(dim(M)[1] != dim(M)[2]){
+    # return error, quit function
+    stop("Matrix given is not square.")
+  }
+  # continue
+  
+  # declare return values
+  row_disks = data.frame(matrix(nr=dim(M)[1],nc=2))
+  col_disks = data.frame(matrix(nr=dim(M)[1],nc=2))
+  colnames(row_disks) = c("center", "radius")
+  colnames(col_disks) = c("center", "radius")
+  
+  
+  # define return values
+  row_disks$radius = deleted_row_sum(M)
+  col_disks$radius = deleted_col_sum(M)
+  
+  row_disks$center = diag(M)
+  col_disks$center = diag(M)
+  return(list(row_disks, col_disks))
+}
+```
+
+##### Write function *plot_gg_disks*
+
+Takes square matrix 'M'
+
+Returns two plots on with the real numbers on the x-axis, and imaginary numbers on the y-axis
+
+Will plot both the 'row_disks' and the 'col_disks' from the *gershgorin_disks* function
+
+Use distinct colors for the row disks and the col disks, so you know which is which
+
+Will not be using fill when coloring the disks, due to the possibility of overlap, 
+instead will just be doing an outline, which is technically not accurate, 
+but I figured as long as I acknowledged it, the increase in clarity would be worth it.
+
+```{r}
+plot_gg_disks = function(M){
+  # ensure M is square
+  if(dim(M)[1] != dim(M)[2]){
+    # return error, quit function
+    stop("Matrix given is not square.")
+  }
+  # continue
+  disks = gershgorin_disks(M)
+  # print(disks)
+  # plot row_disk
+  
+  # get data to plot
+  r_x = Re(as.data.frame(disks[1])$center)
+  r_y = Im(as.data.frame(disks[1])$center)
+  r_r = Re(as.data.frame(disks[1])$radius)
+  # * Since radius is the sum of absolute values, |i| = 1, so it's always Real
+  # but, just to be sure
+  c_x = Re(as.data.frame(disks[2])$center)
+  c_y = Im(as.data.frame(disks[2])$center)
+  c_r = Re(as.data.frame(disks[2])$radius)
+  
+  # construct dataframes to plot
+  circ1 = data.frame(
+    x = r_x,
+    y = r_y,
+    r = r_r
+  )
+  circ2 = data.frame(
+    x = c_x,
+    y = c_y,
+    r = c_r
+  )
+  
+  print("row disks are:")
+  print(circ1)
+  print("col disks are:")
+  print(circ2)
+  
+  # plot both row and col disks
+  ggplot() +
+    geom_circle(aes(x0 = x, y0 = y, r = r), data=circ1, color="red") +
+    geom_circle(aes(x0 = x, y0 = y, r = r), data=circ2, color="blue") +
+    labs(x="Real Numbers", y="Imaginary Numbers") + coord_fixed()
+  
+  
+}
+
+```
+
+##### Write functions *make_row_stochastic_matrix* and *make_col_stochastic_matrix*
+
+Start by making a helper function to normalize vectors
+
+```{r}
+normalize = function(vec){
+  return(vec / sqrt(sum(vec^2)))
+}
+```
+
+
+A matrix is row stochastic if:
+
+No entry is equal to zero
+
+All the entries in a row equal to 1
+
+Non-Negative Matrix (all entries positive)
+
+Create a square matrix of size 'n'
+
+```{r}
+make_row_stochastic_matrix = function(n){
+  # n x n matrix, all NA
+  mat = matrix(nc=n,nr=n)
+  # generate random n x 1 vectors, all normalized
+  for(i in c(1:n)){
+    mat[i,] = normalize(runif(n, 0, 2))
+  }
+  return(mat)
+}
+```
+
+A matrix is col stochastic if:
+
+No entry is equal to zero
+
+All the entries in a col equal to 1
+
+Non-Negative Matrix (all entries positive)
+
+Create a square matrix of size 'n'
+
+```{r}
+make_col_stochastic_matrix = function(n){
+  # n x n matrix, all NA
+  mat = matrix(nc=n,nr=n)
+  # generate random n x 1 vectors, all normalized
+  for(i in c(1:n)){
+    mat[,i] = normalize(runif(n, 0, 2))
+  }
+  return(mat)
+}
+```
+
+##### Use *plot_gg_disks* to plot the disks associated with the matrices in Q1
+
+```{r}
+# ggplot2 extension package that has geom_circle in it
+if (!require("ggforce")) {
+    install.packages("ggforce")
+    library(ggforce)
+}
+A = matrix(c(1, -1, 1, -2), nc=2, nr=2)
+B = matrix(c(2, -1, 1i, 1, 1+2i, 0, 1, 2, -1), nc=3, nr=3)
+plot_gg_disks(A)
+plot_gg_disks(B)
+
+```
+
+##### Plot Random Stochastic Matrices
+
+```{r}
+S1 = make_row_stochastic_matrix(5)
+S1
+S2 = make_col_stochastic_matrix(5)
+S2
+plot_gg_disks(S1)
+plot_gg_disks(S2)
+```
+
+
+
+
+
+
+
+

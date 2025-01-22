@@ -1,0 +1,349 @@
+---
+output: html_document
+date: "2023-09-20"
+name: "Ryan Dotzlaw"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Ryan Dotzlaw
+
+
+#### Part 1: Download the file
+
+
+``` {r}
+
+# url = "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_Demographic_Indicators_Medium.zip"
+
+# download.file(url, "output.zip")
+
+```
+
+
+#### Part 2: Unzip the file, put into dataframe
+
+
+```{r}
+
+# unzip
+# zip = "output.zip"
+# unzip(zip)
+
+# put into dataframe
+# file_name = "WPP2022_Demographic_Indicators_Medium.csv"
+# full_data = read.csv(file_name)
+
+full_data = read.csv(url("https://raw.githubusercontent.com/julien-arino/math-of-data-science/main/CODE/WPP2022_Demographic_Indicators_Medium.csv"))
+
+# filter out irrelevant data
+data = full_data[full_data$Location == "Canada" & full_data$Time <= 2023,]
+
+```
+
+
+#### Part 3: Plot the total population of that country
+
+Multiply the population by 1000 to get the real number, not in a measure of thousands
+
+
+```{r}
+
+# sort data by time ascending
+sorted = data[order(data$Time),]
+
+# plot data
+plot(x=data$Time ,y=data$TPopulation1Jan*1000, xlab="Year", ylab="Population")
+
+```
+
+
+#### Part 4a: Fit lines to the plot
+
+##### Start with fitting the line: y = a + bx
+
+Initially, create the matrix 'A', which consists of two columns of the coefficients for 'a' and 'b'
+
+The coefficients for the 'a' value is just 1's, so fill the first column with a 1 for every 'x' value in the plot
+
+The coefficients for the 'b' value are the 'x' values, so the second column is all of the values in 'data$Time'
+
+```{r}
+
+A = matrix(c(rep(1, length(data$Time)), data$Time), nr=length(data$Time), nc=2)
+A
+
+```
+
+
+Now make the vector 'b', which is just the 'y' values of the plot
+
+
+```{r}
+
+b = data$TPopulation1Jan
+
+```
+
+
+Now create the matrix multiplication of 'A' transpose times 'A', and get it's inverse
+
+
+```{r}
+
+AtA = t(A) %*% A
+
+# Look at the result, and it's determinate
+AtA
+det(AtA)
+
+# Invert the result
+invAtA = solve(AtA)
+
+```
+
+
+Since the determinate of 'AtA' is non-zero, and the columns that make up 'A' are clearly linearly independent, there is a unique solution.
+
+The unique solution is the inverse of 'AtA', times the transpose of 'A', times 'b'.
+
+
+```{r}
+
+solution_linear = invAtA %*% t(A) %*% b
+solution_linear
+
+```
+
+
+##### Now fit the line: y = a + bx + cx^2
+
+
+It's pretty much the same, only 'A' has a third column consisting of the coefficients for 'c', namely a column of 'x^2'
+
+However, due to the large values of 'x^2', that will continue to get larger as we work towards a solution for our quadratic line,
+we could run into problems when we try and find the inverse, namely the value of our determinate will get so extreme that the result will be functionally 0.
+
+This can be solved by modifying the values of 'x', so long as they maintain the gaps between each value there will be no problem.
+
+So by subtracting the minimum 'x' value from all 'x' values, we get smaller numbers that maintain the gap between the original 'x' values,
+thereby solving the issue of the extreme determinate.
+
+
+```{r}
+
+A2 = matrix(c(rep(1, length(data$Time)), data$Time-min(data$Time), (data$Time-min(data$Time))^2), nr=length(data$Time), nc=3)
+A2
+
+```
+
+
+The vector 'b' remains unchanged
+
+
+```{r}
+
+AtA2 = t(A2) %*% A2
+
+# Look at the result, and it's determinate
+AtA2
+det(AtA2)
+
+# Invert the result
+invAtA2 = solve(AtA2)
+invAtA2
+
+```
+
+
+Now compute the solution which is the inverse of 'AtA2', times the transpose of 'A2', times 'b' 
+
+
+```{r}
+
+solution_quadratic = invAtA2 %*% t(A2) %*% b
+solution_quadratic
+
+```
+
+
+#### Part 4b: Fit lines to the plot using Least Squares Fit
+
+##### Starting with y = a + bx
+
+Start by creating a function to model a line.
+
+Then we need to find the error between this line and the actual values.
+
+This is done by taking the difference between the actual points and the modeled points
+
+
+```{r}
+
+# Create a function to output the estimated values
+# y = a + bx
+linear = function(x, a, b){
+  return(a + b*x)
+}
+
+# Create the error function for a linear function
+# e_i = y_i - y_i~
+# total is sqrt of sum of e_i ^ 2
+error_linear = function(a, b, points){
+  yt = linear(points$x, a, b)
+  e = points$y - yt
+  return(sqrt(sum(e^2)))
+}
+
+```
+
+
+But we can't actually do anything with this unless we have the parameters needed to model a line.
+
+To solve this we can use a genetic algorithm to automatically optimize our hyper parameters using our error function.
+
+```{r}
+
+# Create points list for model
+points = list()
+points$x = c(data$Time-min(data$Time))
+points$y = c(data$TPopulation1Jan)*1000
+
+# installs 'GA' package if not already installed
+if(!require(GA)){
+  install.packages("GA")
+  library(GA)
+}
+
+library(GA)
+GA = ga(type = "real-valued", 
+        fitness = function(val) {return(-error_linear(a = val[1], b = val[2], points))},
+        suggestions = c(a = 1.4e+07, b = 300000),
+        lower = c(0, 0), upper = c(4e+07, 1.5e+10),
+        popSize = 200, maxiter = 500)
+plot(GA)
+
+```
+
+And the values for 'a' and 'b' are:
+
+```{r}
+
+GA@solution
+-GA@fitnessValue
+
+```
+
+##### Now for y = a + bx + cx^2
+
+Simply create a new quadratic function and an error function to go along with it.
+
+The formula for the error stays the same.
+
+```{r}
+
+# Create a function to output the estimated values
+# y = a + bx + cx^2
+quadratic = function(x, a, b, c){
+  return(a + b*x + c*(x^2))
+}
+
+# Create the error function for a quadratic function
+# e_i = y_i - y_i~
+# total is sqrt of sum of e_i ^ 2
+error_quadratic = function(a, b, c, points){
+  yt = quadratic(points$x, a, b, c)
+  e = points$y - yt
+  return(sqrt(sum(e^2)))
+}
+
+```
+
+
+Then just preform the genetic algorithm with the new error function
+
+
+```{r}
+GA2 = ga(type = "real-valued", 
+        fitness = function(val) {return(-error_quadratic(a = val[1], b = val[2], c=val[3], points))},
+        suggestions = c(a = 1.4e+07, b = 3000, c = 10),
+        lower = c(0, 0, 0), upper = c(2e+07, 1.5e+7, 3000),
+        popSize = 200, maxiter = 500)
+plot(GA2)
+```
+```{r}
+GA2@solution
+-GA2@fitnessValue
+```
+
+
+#### Part 5: Plot lines on graph
+
+
+```{r}
+# use the modified x-values
+x = data$Time-min(data$Time)
+
+# plot data every time
+
+# plot y = a + bx
+plot(x=data$Time ,y=data$TPopulation1Jan*1000, xlab="Year", ylab="Population")
+title("y = a + bx")
+lines(x=data$Time, y=1000*(solution_linear[1] + solution_linear[2]*data$Time), type="l", lwd=2, col="red")
+
+# plot y = a + bx + cx^2
+plot(x=data$Time ,y=data$TPopulation1Jan*1000, xlab="Year", ylab="Population")
+title("y = a + bx + cx^2")
+lines(x=data$Time, y=1000*(solution_quadratic[1] + solution_quadratic[2]*x + solution_quadratic[3]*(x ^ 2)), type="l", lwd=1, col="blue")
+
+# plot y = a + bx least squares
+plot(x=data$Time ,y=data$TPopulation1Jan*1000, xlab="Year", ylab="Population")
+title("y = a + bx least squares")
+lines(x=data$Time, y=(linear((points$x), GA@solution[1], GA@solution[2])), lwd=2, col="black")
+
+# plot y = a + bx + cx^2 least squares
+plot(x=data$Time ,y=data$TPopulation1Jan*1000, xlab="Year", ylab="Population")
+title("y = a + bx + cx^2 least squares")
+lines(x=data$Time, y=(quadratic((points$x), GA2@solution[1], GA2@solution[2], GA2@solution[3])), lwd=2, col="green")
+
+```
+
+
+
+#### Part 6: Predict the population at 2030
+
+
+Predicting the population at 2030 just involves plugging in 2030 for the 'x' values used in the 'y=' part of the line plots.
+
+Though, you have to remember to shift 2030 by the earliest year value for the quadratic prediction and the least squares prediction.
+
+
+```{r}
+
+linear_pred = 1000*(solution_linear[1] + solution_linear[2]*2030)
+quad_pred = 1000*(solution_quadratic[1] + solution_quadratic[2]*(2030-min(data$Time)) + solution_quadratic[3]*((2030-min(data$Time)) ^ 2))
+least_lpred = linear((2030-min(data$Time)), GA@solution[1], GA@solution[2])
+least_qpred = quadratic((2030-min(data$Time)), GA2@solution[1], GA2@solution[2], GA2@solution[3])
+
+linear_pred
+quad_pred
+least_lpred
+least_qpred
+
+```
+
+It should be noted that the original data has predictions for Canada's future population up to the year 2100,
+so we can compare our predicted result, to the predicted result in the .csv.
+
+```{r}
+
+pred = full_data[full_data$Location == "Canada" & full_data$Time == 2030,]
+pred$TPopulation1Jan * 1000
+
+```
+
+
+From this we can see that the closest model to the given prediction is the least squares quadratic model.
+

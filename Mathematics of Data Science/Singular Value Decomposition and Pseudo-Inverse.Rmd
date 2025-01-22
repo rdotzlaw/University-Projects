@@ -1,0 +1,270 @@
+---
+output: html_document
+date: "2023-10-12"
+name: "Ryan Dotzlaw"
+---
+
+#### Ryan Dotzlaw
+
+#### Q1
+##### Compute the SVD of the following matrices
+
+```{r}
+A = matrix(c(c(1,0), c(1,0)), nc=2, nr=2)
+A
+B = matrix(c(c(-2,0), c(0, 0)), nc=2, nr=2)
+B
+C = matrix(c(c(2,0), c(0,2), c(1,0)), nc=3, nr=2)
+C
+```
+##### The SVD formula
+The SVD of any matrix 'M', size 'm' by 'n' is:
+
+M = U * E * V^T,
+
+where U is the orthonormal eigenvectors of M * M^T,
+
+and where V is the orthonormal eigenvectors of M^T * M,
+
+and where E is a diagonal matrix of the singular values (square root of eigenvalues) of size 'm' by 'n'
+
+##### SVD of A
+
+```{r}
+# calculating U
+AAt = A %*% t(A)
+eu = eigen(AAt)
+# for some reason the eigenvectors are negative, I assume this has something to do with the eigen() implementation
+# it should be noted that below, when using svd(), U has no negative values.
+# So, since U needs to be the orthonormal eigenvectors of 'AAt', we can just multiply both eigenvectors
+# by -1, and they will remain orthonormal eigenvectors of 'AAt' associated with the same eigenvalues
+
+Ua = matrix(c(-1 * eu$vectors), nc=2, nr=2)
+Ua
+
+# calculating V
+AtA = t(A) %*% A
+ev = eigen(AtA)
+Va = matrix(c(ev$vectors), nc=2, nr=2)
+Va
+
+# calculate E
+# looking at the eigenvalues
+eu$values
+ev$values
+# the only non-zero eigenvalue is 2,
+# so the only singular value put in the E matrix is sqrt(2)
+# so E is just sqrt(2) on the main diagonal, and the rest is zeros
+# E needs to be size 'm' by 'n', so 2 by 2
+Ea = matrix(c(c(sqrt(eu$values)), c(0, 0)), nc=2, nr=2)
+Ea
+
+# now the result of U %*% E %*% t(V) should be equal to A again
+A == Ua %*% Ea %*% t(Va)
+```
+```{r}
+# using the SVD function built in to calculate svd of A
+svdA = svd(A)
+# U is
+svdA$u
+# V is
+svdA$v
+# the singular values of A are
+svdA$d
+# set up the diagonal E matrix using the non-zero singular values svdA$d
+# E is 'm' by 'n', so 2 by 2, with the singular values on the diagonal
+E = diag(svdA$d, nc=2, nr=2)
+E
+res = svdA$u %*% E %*% t(svdA$v)
+res
+A
+
+# on my machine, this returns FALSE when comparing the 1's in 'res' to the 1's in 'A'
+# I assume this is some floating point arithmetic error, but the value are both 1's of 'num' type
+# I legitimately don't know why it does this, but taking the ceiling of both matrices works,
+# so it must be some floating point error?
+res == A
+# what????
+ceiling(res) == ceiling(A)
+```
+##### SVD of B
+```{r}
+# calculate U
+BBt = B %*% t(B)
+eu = eigen(BBt)
+# once again, the eigenvectors are negative for some reason, in this case we want a negative to get the '-2' in B
+Ub = matrix(c(eu$vectors), nc=2, nr=2)
+Ub
+
+# calculate V
+BtB = t(B) %*% B
+ev = eigen(BtB)
+# these eigenvectors are all negative too, 
+# but since they're already negative in U, this will cause the 'SVD = -B'
+# so multiply these eigenvectors by -1 (they're still othonormal eigenvectors of BtB)
+Vb = matrix(c(-1 * ev$vectors), nc=2, nr=2)
+Vb
+
+# calculate E
+eu$values
+ev$values
+Eb = diag(c(c(sqrt(eu$values))), nc=2, nr=2)
+Eb
+
+res = Ub %*% Eb %*% t(Vb)
+res
+res == B
+```
+```{r}
+# using built in SVD to calculate svd of B
+svdB = svd(B)
+# U is
+svdB$u
+# V is
+svdB$v
+# singular values of B are
+svdB$d
+
+# now create the diagonal E matrix using the singular values on the main diagonal
+# E has the same dimensions as B, so 2 by 2
+E = diag(svdB$d, nc=2, nr=2)
+E
+
+resB = svdB$u %*% E %*% t(svdB$v)
+resB
+B
+resB == B
+
+```
+##### SVD of C
+```{r}
+# calculate U
+CCt = C %*% t(C)
+eu = eigen(CCt)
+# negative again, for some reason, you know the drill by now
+Uc = matrix(c(-1 * eu$vectors), nc=2, nr=2)
+Uc
+
+# calculate V
+CtC = t(C) %*% C
+ev = eigen(CtC)
+# the second eigenvector is negative for some reason
+ev$vectors[,2]
+# make it non-negative, to make the SVD work (remains orthonormal eigenvector)
+ev$vectors[,2] = -1 * ev$vectors[,2]
+Vc = matrix(c(ev$vectors), nc=3, nr=3)
+Vc
+
+# calculate E
+eu$values
+# floating point error, round eigenvalues
+round(ev$values, 14)
+# non-zero eigenvalues are 5 and 4
+# size of E is the same as C, so a 2 x 3 matrix
+Ec = diag(sqrt(eu$values), nc=3, nr=2)
+Ec
+
+resC = Uc %*% Ec %*% t(Vc)
+resC
+C
+# weird floating point stuff??
+round(resC) == round(C)
+```
+
+```{r}
+# using built in SVD to calculate svd of C
+svdC = svd(C)
+# U is
+svdC$u
+# V is
+svdC$v
+
+# this only gives two eigenvectors for V
+# this is because the eigenvalue associated with the third eigenvector is 0
+# so the third eigenvector is technically arbitrary, but I included it for matrix size consistency
+
+
+# the singular values of C are
+svdC$d
+
+# now create E, diagonal matrix w/ same dimensions as C, so a 2 x 3 matrix
+# however, since 'svdC$v' only contains 2 vectors, E will have to be a 2 x 2 matrix
+E = diag(svdC$d, nc=2, nr=2)
+E
+
+resC = svdC$u %*% E %*% t(svdC$v)
+resC
+C
+
+# float stuff again
+round(resC) == round(C)
+```
+#### Q2
+##### Compute the Pseudo-Inverses of the matrices given in Q1
+
+The pseudo-inverse of a matrix M uses the SVD of that matrix.
+
+Given the SVD of M: M = U * E * V^T,
+
+The pseudo-inverse of M, 'M^t' is:
+
+M^t = V * E^t * U^T
+
+Where E^t is the pseudo inverse of E, specifically, a diagonal matrix of the reciprocal of the non-zero singular values of 'M'
+
+##### Pseudo-Inverse of A
+```{r}
+# have U and V, need to make E^t
+
+# get the eigenvalues
+sing = eigen(A %*% t(A))$values
+# invert the non-zero entries, take the square root
+sing = sqrt(c(sing[sing != 0]^-1, sing[sing == 0]))
+sing
+# make diagonal matrix of non-zero singular reciprocals
+Et = diag(sing, nc=2, nr=2)
+Et
+
+At = Va %*% Et %*% t(Ua)
+At
+
+```
+
+##### Pseudo-Inverse of B
+
+```{r}
+# have U and V, need to make E^t
+
+# get the eigenvalues
+sing = eigen(B %*% t(B))$values
+# invert the non-zero entries, take the square root
+sing = sqrt(c(sing[sing != 0]^-1, sing[sing == 0]))
+sing
+# make diagonal matrix of non-zero singular reciprocals
+Et = diag(sing, nc=2, nr=2)
+Et
+
+Bt = Vb %*% Et %*% t(Ub)
+Bt
+```
+
+
+##### Pseudo-Inverse of C
+
+```{r}
+# have U and V, need to make E^t
+
+# get the eigenvalues
+sing = eigen(C %*% t(C))$values
+# invert the non-zero entries, take the square root
+sing = sqrt(c(sing[sing != 0]^-1, sing[sing == 0]))
+sing
+# make diagonal matrix of non-zero singular reciprocals
+# needs to be 3 x 2 to matrix multiply w/ V
+Et = diag(sing, nc=2, nr=3)
+Et
+
+Ct = Vc %*% Et %*% t(Uc)
+Ct
+```
+
