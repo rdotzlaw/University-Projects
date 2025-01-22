@@ -1,8 +1,5 @@
-## Assignment 2
 
-### Comp 4580
-
-#### Ryan Dotzlaw - 
+#### Ryan Dotzlaw
 
 Do task 1, 2, 3, and 8.
 
@@ -166,6 +163,7 @@ Even then, 32 minutes for a rootshell doesn't seem like a daunting amount of tim
 
 ### Appendix
 
+#### exploit.py
 ```
 #!/usr/bin/python3
 import sys

@@ -1,6 +1,5 @@
-## Assignment 1
-### Comp 4580
-#### Ryan Dotzlaw - 
+
+#### Ryan Dotzlaw
 
 ### Task 1: Encryption mode: ECB vs CBC
 
