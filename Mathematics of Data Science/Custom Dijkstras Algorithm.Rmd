@@ -6,6 +6,13 @@ name: "Ryan Dotzlaw"
 
 ### Ryan Dotzlaw
 
+```{r}
+if (!require("igraph")) {
+    install.packages("igraph")
+    library(igraph)
+}
+```
+
 Implement Dijkstra's Algorithm, then verify it's accuracy w/ igraph's implementation
 
 ```{r}
