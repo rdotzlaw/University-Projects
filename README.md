@@ -4,46 +4,46 @@ This is a collection of projects and assignments I did while getting my CS bache
 
 ## Directory:
 - ### Computer Security
-    - #### [Encryption and Decryption]()
+    - #### [Encryption and Decryption](./Computer%20Security/Encryption%20and%20Decryption/README.md)
 
         A comparison of AES-ECB and AES-CBC encryption modes, and implementation of a key generation algortihm for symmetric encryption/decryption.
-    - #### [Buffer Overflow Attack]()
+    - #### [Buffer Overflow Attack](./Computer%20Security/Buffer%20Overflow%20Attack/README.md)
 
         A writeup about performing a buffer oveflow attack on a program to achive a root shell.
-    - #### [Environment Variable Attack]()
+    - #### [Environment Variable Attack](./Computer%20Security/Environment%20Variable%20Attack/README.md)
 
         A writeup about modifying a system's `PATH` environment variables to execute arbitrary malicious code.
-    - #### [SQL Injection]()
+    - #### [SQL Injection](./Computer%20Security/SQL%20Injection/README.md)
 
         A basic SQL injection attack on an example website.
-    - #### [SYN Flooding Attack]()
+    - #### [SYN Flooding Attack](./Computer%20Security/SYN%20Flooding%20Attack/README.md)
 
         A DOS attack performed using invalid SYN packets to spoof false incoming TCP connections.
 - ### Operating Systems
-    - #### [ELF File Reader]()
+    - #### [ELF File Reader](./Operating%20Systems/ELF%20File%20Reader/README.md)
 
         A custom program designed to read and interpret ELF formatted binary files.
-    - #### [Threads and Processes Management]()
+    - #### [Threads and Processes Management](./Operating%20Systems/Threads%20and%20Processes%20Management/README.md)
 
         Two programs simulating a handler that manages threads/processes through signals.
-    - #### [Custom Shell]()
+    - #### [Custom Shell](./Operating%20Systems/Custom%20Shell/README.md)
 
         A very basic custom shell that can execute other programs and perform basic redirects, piping, and process substitution.
-    - #### [EXFAT File Reader]()
+    - #### [EXFAT File Reader](./Operating%20Systems/EXFAT%20File%20Reader/README.md)
 
         A program that reads any `.exfat` formatted files that are disk images of EXFAT formated file systems.
-    - #### [EXFAT Volume Checker]()
+    - #### [EXFAT Volume Checker](./Operating%20Systems/EXFAT%20Volume%20Checker/README.md)
 
         A program that checks EXFAT formated disk images and validates the MBR and file systems consistency.
-    - #### [Threads and Locking]()
+    - #### [Threads and Locking](./Operating%20Systems/Threads%20and%20Locking/README.md)
 
         An implementation and comparison of various locking techniques used with multithreading.
-    - #### [CPU Task Management Simulation]()
+    - #### [CPU Task Management Simulation](./Operating%20Systems/CPU%20Task%20Management%20Simulation/README.md)
 
         A simulation of a CPU executing and switching between various tasks, organized via a multi-level feedback queue.
 
 - ### Machine Learning
-    - #### [K-Step Ahead Forecasting]()
+    - #### [K-Step Ahead Forecasting](./Machine%20Learning/K-Step%20Ahead%20Forecasting.ipynb)
 
         A custom implementation of an echo state neural network to perform k-step ahead forecasting on `sin` and `lorenz` functions.
 - ### Mathematics of Data Science
