@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memo Website</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.png">
+    <script src="index.js"></script>
+</head>
+<body>
+<h1>The Memo Website</h1>
+<form>
+    <label for="input-memo">Memo:</label>
+    <input type="text" id="input-memo"/>
+    <input type="button" value="submit" onclick="post()">
+</form>
+<br>
+<input type="button" value="Get all Memos" onclick="getAll()">
+
+<ul id="memo-list">
+</ul>
+
+</body>
+</html>
