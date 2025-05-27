@@ -184,7 +184,7 @@ A blockchain client for a classroom run blockchain built with it's own custom ne
 
 #### [Study Buddy](https://github.com/kdotzlaw/StudyBuddy)
 
-A full stack accademic tracking app built in a five member team. 
+A full stack academic tracking app built in a five member team. 
 
 I worked on the API design and documentation along with the backend Flask webserver.
 
