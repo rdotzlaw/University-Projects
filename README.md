@@ -178,6 +178,8 @@ A blockchain client for a classroom run blockchain built with it's own custom ne
 
 ### Project Management
 
+![logo](https://raw.githubusercontent.com/kdotzlaw/StudyBuddy/main/frontend/public/assets/title_sq.png)
+
 #### [Study Buddy](https://github.com/kdotzlaw/StudyBuddy)
 
 A full stack accademic tracking app built in a five member team. 
