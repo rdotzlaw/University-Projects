@@ -178,8 +178,8 @@ A blockchain client for a classroom run blockchain built with it's own custom ne
 
 ### Project Management
 
-<p align="center">
-<img height="300" width="300" src="https://raw.githubusercontent.com/kdotzlaw/StudyBuddy/main/frontend/public/assets/title_sq.png" alt="Study Buddy logo" align="center">
+<p align="left">
+<img height="150" width="150" src="https://raw.githubusercontent.com/kdotzlaw/StudyBuddy/main/frontend/public/assets/title_sq.png" alt="Study Buddy logo" align="left">
 </p><br>
 
 #### [Study Buddy](https://github.com/kdotzlaw/StudyBuddy)
