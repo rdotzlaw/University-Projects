@@ -176,12 +176,21 @@ A blockchain client for a classroom run blockchain built with it's own custom ne
 
 ---
 
+### Project Management
+
+#### [Study Buddy](https://github.com/kdotzlaw/StudyBuddy)
+
+A full stack accademic tracking app built in a five member team. 
+
+I worked on the API design and documentation along with the backend Flask webserver.
+
+Out of all the projects here, this one is the most 'formal', with properly planned features, a proper testing plan and testing suite, and thourough documentation.
+
+---
 ## TODO:
 Comp 3380 project
 
 DB2 query optimization?
-
-Link to study buddy
 
 
 research paper python code?
