@@ -191,13 +191,22 @@ I worked on the API design and documentation along with the backend Flask webser
 Out of all the projects here, this one is the most 'formal', with properly planned features, a proper testing plan and testing suite, and thourough documentation.
 
 ---
+
+### Data Mining
+
+#### [Covid-19 Data Analysis](/Data%20Mining/Covid-19%20Data%20Analysis/)
+
+The source code used to generate various graphs and diagrams used for the association rule section of the original project submission and the published papers.
+
+Associated papers:
+- [Mining Big Healthcare Data to Predict Long COVID Cases](https://ieeexplore.ieee.org/document/10143145)
+- [A Data Science Solution for Analyzing Long COVID Cases](https://ieeexplore.ieee.org/document/10229344)
+- [Data Analytics and Prediction of Long COVID Cases with Fuzzy Logic](https://ieeexplore.ieee.org/document/10309753)
+
 ## TODO:
 Comp 3380 project
 
 DB2 query optimization?
-
-
-research paper python code?
 
 finish this readme, and add readmes for class folders(?)
 
