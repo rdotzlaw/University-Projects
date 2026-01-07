@@ -1,0 +1,173 @@
+
+
+EER Diagram Constraints
+
+Reported By:
+	Since there are no duplicate landslides, there will only ever be
+	a 1 to 1 relation between sources and landslides.
+	While a landslide doesn't have to have a source, each source in the
+	database is reporting on a landslide, therefore, source's participation
+	is manditory in Reported By.
+	
+During:
+	Every storm in the database is one that caused a landslide, but not every
+	landslide is caused by a storm. Therefore, Storm has total participation, and
+	Event has partial participation.
+	Multple landslides can be caused by a single storm, but only one storm can cause
+	a single landslide. Therefore, During is a 1 to many relation
+	
+Category IS-A:
+	Every landslide has a category, and every category in the database applies to
+	at least one landslide. Therefore, IS-A is a total participation 1 to many relation
+
+Location IN:
+	Not every location is associated with a country, and not every country may have a location in it,
+	but multiple locations can occur in a country. Therefore, a 1 to many partial relation.
+
+Location AT:
+	Multiple landslides can occur at the same location, and every landslide occur somewhere, but a landslide
+	cant occur in 2 places at once. All the locations in the domain are locations that have had a landslide.
+	Therefore, a 1 to many relation, with total participation.
+	
+Imported From:
+	Every import has an associated landslide, but not every landslide was imported from somewhere.
+	Therefore, a 1 to 1 relation, with Import having total participation.
+	
+Event/Country IN:
+	Not every landslide will occur in a country, but multiple can occur in single country.
+	All the countries in the domain will have a landslide.
+	Therefore, 1 to many relation, with Country having total participation.
+
+Event/Admin Division IN:
+	Not every landslide will occur in an Admin Division, but multiple can occur in single Admin Division.
+	All the Admin Division in the domain will have a landslide.
+	Therefore, 1 to many relation, with Admin Division having total participation.
+
+Gazeteer NEAR:
+	Not every landslide will occur near a Gazeteer, but multiple can occur at the same location.
+	All the Gazeteer in the domain will have a landslide near them.
+	Therefore, 1 to many relation, with Gazeteer having total participation.
+
+Country/Admin Division IN:
+	All Admin Divisions must be in a country by definition, and multiple can be in a single country.
+	But not every country needs to have Admin Divisions.
+	Therefore, a 1 to many relation, with Admin Division having total participation.
+
+Admin Division/Gazeteer IN:
+	Gazeteer's are all in Admin Divisions, and there can be multiple per Admin Division.
+	But an Admin Division might not have a Gazeteer.
+	Therefore, 1 to many relation, with total participation for Gazeteer. 
+
+** Got rid of event_time column, since it was all NULL
+** Got rid of event_import_id column, since it was exactly the same as event_id
+
+
+Storm(
+	stormName String not null
+	eId int not null
+	PK(stormName, eID)
+	FK (eID) ref Event
+)
+FD: None
+
+Source(
+	url String not null
+	sourceName String
+	photoLink String
+	PK(url)
+)
+FD: url -> {all}
+
+Category(
+	category String not null
+	trigger String not null
+	size String not null
+	setting String not null
+	eID int not null
+	PK(category, trigger, size, setting, eID)
+	FK (eID) ref Event
+)
+FD: None
+
+Country(
+	code String not null
+	countryName String
+	PK(code)
+)
+FD: code -> {all}
+
+BasedIn(
+	sourceName String not null
+	code String not null
+	PK(sourceName, code)
+	FK (sourceName) ref Source
+	FK (code) ref Country
+)
+FD: None
+
+Report(
+	eID int not null
+	sourceName String not null
+	PK(eID, sourceName)
+	FK (eID) ref Event
+	FK (sourceName) ref Source
+)
+FD: None
+
+Location(
+	long real not null
+	lat real not null
+	lDesc String
+	lAcc String
+	eID int not null
+	code String not null
+	PK(long, lat, eID, code)
+	FK (eID) ref Event
+	FK (code) ref Country
+)
+FD: (long,lat, eID, code) -> {all}
+
+Import(
+	eIDImport int not null
+	ISource String
+	submitTime String
+	createTime String
+	editTime String
+	PK(eIDImport)
+	FK (eIDImport) ref Event (eID)
+)
+FD: (eIDImport) -> {all}
+
+Division(
+	divName String not null
+	divPop String not null
+	gClosest String not null
+	gDist real not null
+	code String not null
+	eID int not null
+	PK(divName, divPop, gClosest, gDist, code, eID)
+	FK (code) ref Country
+	FK (eID) ref Event
+)
+FD: None
+
+Event(
+	eID int not null
+	eTitle String
+	eDesc String
+	eDate String
+	fatality int
+	injury int
+	notes String
+	PK(eID)
+)
+FD: (eID) -> {all}
+
+
+
+
+
+
+
+
+

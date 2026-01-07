@@ -203,13 +203,53 @@ Associated papers:
 - [A Data Science Solution for Analyzing Long COVID Cases](https://ieeexplore.ieee.org/document/10229344)
 - [Data Analytics and Prediction of Long COVID Cases with Fuzzy Logic](https://ieeexplore.ieee.org/document/10309753)
 
-## TODO:
-Comp 3380 project
+---
 
-DB2 query optimization?
+### Computer Systems
+
+A collection of assembly code snippits:
+
+#### [Hello World](/Computer%20Systems/helloworld.asm)
+Assembly `Hello World` snippet.
+
+#### [Sum](/Computer%20Systems/sum.asm)
+Basic adding logic snippet.
+
+#### [If Else](/Computer%20Systems/ifelse.asm)
+A basic if/else conditional that checks if an entered character ends with `b101` or `b01`.
+
+#### [Loop](/Computer%20Systems/loop.asm)
+A basic loop with a conditional.
+
+#### [While Loop](/Computer%20Systems/while.asm)
+Loops until user enters `CTRL + D`, takes in a character input each loop and outputs that character as lowercase.
+
+#### [Linear Search](/Computer%20Systems/linearsearch.asm)
+Searches a `source` list for each entry in a list of `targets`.
+
+#### [Sum Odd and Even](/Computer%20Systems/sumoddeven.asm)
+Loops through a list and sums up all the even numbers and  all the odd numbers.
+
+#### [Pointers](/Computer%20Systems/pointers.asm)
+A basic conditional using pointers.
+
+#### [Interrupt](/Computer%20Systems/interrupt.asm)
+Keyboard interrupt handler in assembly.
+
+#### [Recursion](/Computer%20Systems/recursion.asm)
+Recursion in assembly for the function: `f(x) = f(x - 1) - 2x, f(0) = 1, x >= 0`.
+
+### Databases
+
+#### [Database Interface](/Databases/Database%20Interface/)
+A basic UI built in Java for running pre-determined queries on a database.
+Also features breaking down a monolithic `.csv` file into multiple tables.
+
+#### [Query Optimization](/Databases/Query%20Optimization/)
+A series of SQL queries, database optimizations via non-clustered B+ trees, and optimized SQL queries along with a python script to compare times between regular and optimized queries.
+
+## TODO:
 
 finish this readme, and add readmes for class folders(?)
-
-comp 2280 assemby??
 
 comp 2160 c??
