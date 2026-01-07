@@ -239,6 +239,8 @@ Keyboard interrupt handler in assembly.
 #### [Recursion](/Computer%20Systems/recursion.asm)
 Recursion in assembly for the function: `f(x) = f(x - 1) - 2x, f(0) = 1, x >= 0`.
 
+---
+
 ### Databases
 
 #### [Database Interface](/Databases/Database%20Interface/)
@@ -247,6 +249,8 @@ Also features breaking down a monolithic `.csv` file into multiple tables.
 
 #### [Query Optimization](/Databases/Query%20Optimization/)
 A series of SQL queries, database optimizations via non-clustered B+ trees, and optimized SQL queries along with a python script to compare times between regular and optimized queries.
+
+---
 
 ## TODO:
 
