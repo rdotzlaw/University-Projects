@@ -284,8 +284,3 @@ Implementation of Huffman data compression in Javascript using Huffman trees, ha
 
 ---
 
-## TODO:
-
-finish this readme, and add readmes for class folders(?)
-
-comp 2160 c??
