@@ -279,6 +279,9 @@ A CPU process management simulation written in `C++`, also features a testing su
 #### [Whodunit?](/Object%20Oriented%20Programming/Whodunit/)
 A game of Whodunit implmented in Java.
 
+#### [Huffman Data Compression](/Object%20Oriented%20Programming/Huffman%20Data%20Compression/)
+Implementation of Huffman data compression in Javascript using Huffman trees, hash tables and Huffman encoding. Also has a testing suite.
+
 ---
 
 ## TODO:
