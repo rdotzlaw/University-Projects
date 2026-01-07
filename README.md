@@ -276,6 +276,9 @@ A backend for a wiki site built in Java allowing you to create new users or page
 #### [Process Simulation](/Object%20Oriented%20Programming/Process%20Simulation/)
 A CPU process management simulation written in `C++`, also features a testing suite and provided test data.
 
+#### [Whodunit?](/Object%20Oriented%20Programming/Whodunit/)
+A game of Whodunit implmented in Java.
+
 ---
 
 ## TODO:
