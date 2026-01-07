@@ -3,6 +3,22 @@
 This is a collection of projects and assignments I did while getting my CS bachelor's degree at the University of Manitoba
 
 ---
+
+## Table of Contents:
+1. [Computer Security](#computer-security)
+2. [Operating Systems](#operating-systems)
+3. [Machine Learning](#machine-learning)
+4. [Mathematics of Data Science](#mathematics-of-data-science)
+5. [Computer Graphics](#computer-graphics)
+6. [Distributed Computing](#distributed-computing)
+7. [Project Management](#project-management)
+8. [Data Mining](#data-mining)
+9. [Computer Systems](#computer-systems)
+10. [Databases](#databases)
+11. [Object-Oriented Programming](#object-oriented-programming)
+
+---
+
 ### Computer Security
 #### [Encryption and Decryption](./Computer%20Security/Encryption%20and%20Decryption/README.md)
 
@@ -249,6 +265,16 @@ Also features breaking down a monolithic `.csv` file into multiple tables.
 
 #### [Query Optimization](/Databases/Query%20Optimization/)
 A series of SQL queries, database optimizations via non-clustered B+ trees, and optimized SQL queries along with a python script to compare times between regular and optimized queries.
+
+---
+
+### Object Oriented Programming
+
+#### [Wiki](/Object%20Oriented%20Programming/Wiki/)
+A backend for a wiki site built in Java allowing you to create new users or pages, and add, edit or delete things along with a logging feature. Also has a full testing suite built with `JUnit`
+
+#### [Process Simulation](/Object%20Oriented%20Programming/Process%20Simulation/)
+A CPU process management simulation written in `C++`, also features a testing suite and provided test data.
 
 ---
 

@@ -1,0 +1,106 @@
+Enter file name (without file extension)
+a1_test_data
+File found, starting wiki.
+CONFIRMED
+CONFIRMED
+CONFIRMED
+NOT FOUND
+SUCCESS
+NOT FOUND
+SUCCESS
+SUCCESS
+NOT FOUND
+NOT FOUND
+FAIL
+CONFIRMED
+CONFIRMED
+NOT FOUND
+DUPLICATE
+NOT FOUND
+NOT FOUND
+NOT FOUND
+SUCCESS
+FAIL
+SUCCESS
+NOT FOUND
+NOT FOUND
+NOT FOUND
+NOT FOUND
+DUPLICATE
+CONFIRMED
+NOT FOUND
+DUPLICATE
+NOT FOUND
+FAIL
+FAIL
+FAIL
+NOT FOUND
+OO programming is awesome.
+I love OO programing.
+Pointers are useful in Cpp
+NOT FOUND
+NOT FOUND
+CREATE Object_Oriented_Programming mike                                                  
+APPEND Object_Oriented_Programming mike OO programming is awesome.                       
+APPEND Object_Oriented_Programming mike I love OO programing. 
+APPEND Object_Oriented_Programming mike everyone likes pointers in Cpp                    
+DELETE Object_Oriented_Programming mike 5                                                
+REPLACE Object_Oriented_Programming mike 2 Pointers are useful in Cpp                     
+CREATE Object_Oriented_Programming mike                                                   
+RESTORE mike Object_Oriented_Programming 18
+RESTORE mike Object_Oriented_Programming 25
+PRINT Object_Oriented_Programming
+NOT FOUND
+CREATE Graph_Theory ali                                                                   
+RESTORE mike Graph_Theory 5						             
+REPLACE Graph_Theory ali 1 I love graph theory                                           
+APPEND Graph_Theory ali    graph theory is an interesting course                            
+DELETE Graph_Theory john 0                                                              
+RESTORE John Graph_Theory 12
+RESTORE ali Graph_Theory 15
+PRINT Graph_Theory ali
+CREATE Graph_Theory ali                                                                   
+DELETE Graph_Theory ali 1                                                                 
+DELETE Graph_Theory ali 0                                                                 
+DELETE Graph_Theory ali 0                                                                 
+RESTORE ali Graph_Theory 32
+PRINT Graph_Theory
+CREATE Operating_System mike                                                           
+PRINT Operating_System
+NOT FOUND
+USER ali                                                                                 
+CREATE Graph_Theory ali                                                                   
+APPEND Human_Computer_Interaction ali HCI is awesome.                                    
+REPLACE Graph_Theory ali 1 I love graph theory                                           
+APPEND Graph_Theory ali    graph theory is an interesting course                            
+RESTORE ali Graph_Theory 15
+CREATE Graph_Theory ali                                                                   
+DELETE Graph_Theory ali 1                                                                 
+DELETE Graph_Theory ali 0                                                                 
+DELETE Graph_Theory ali 0                                                                 
+RESTORE ali Graph_Theory 32
+USER mike                                                                                 
+CREATE Object_Oriented_Programming mike                                                  
+CREATE Operating_System mike                                                           
+APPEND Object_Oriented_Programming mike OO programming is awesome.                       
+APPEND Object_Oriented_Programming mike I love OO programing. 
+APPEND Object_Oriented_Programming mike everyone likes pointers in Cpp                    
+DELETE Graph_Theory mike 0                                                                
+DELETE Object_Oriented_Programming mike 5                                                
+USER mike                                                                                 
+RESTORE mike Graph_Theory 5						             
+REPLACE Object_Oriented_Programming mike 2 Pointers are useful in Cpp                     
+RESTORE mike History_of_programming_languages 10                                          
+CREATE Object_Oriented_Programming mike                                                   
+DELETE Java_Programming_language mike 20 
+DELETE Java_Programming_language mike 2 
+RESTORE mike Object_Oriented_Programming 18
+RESTORE mike Object_Oriented_Programming 25
+NOT FOUND
+USER john  
+CONFIRMED
+NOT FOUND
+FAIL
+Bye.
+
+Process finished with exit code 0
