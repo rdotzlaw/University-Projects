@@ -84,6 +84,8 @@ Implementing Least Squares problem solver, along with some examples of it runnin
 Performing QR Factorization using the Gram-Schmidt process, along with some examples.
 #### [Singular Value Decomposition and Pseudo-Inverse](./Mathematics%20of%20Data%20Science/Singular%20Value%20Decomposition%20and%20Pseudo-Inverse.Rmd)
 
+Implementing Singular Value Decomposition and Pseudo-Inverse algorithms and comparing them to `R`'s built in algorithms to test their accuracy.
+
 #### [Country Data Analysis](./Mathematics%20of%20Data%20Science/Country%20Data%20Analysis.Rmd)
 
 Performing preliminary data cleaning along with a mathematical analysis on country data.
