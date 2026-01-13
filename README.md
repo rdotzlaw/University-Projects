@@ -116,7 +116,7 @@ Custom markov chain functions along with computing absorbing states and graph re
 
 All computer graphics implemented in processing.
 
-#### [Lines, Triangles, and Surface Tesselation](./Computer%20Graphics/SurfaceTesselation/)
+#### [Lines, Triangles, and Surface Tessellation](./Computer%20Graphics/SurfaceTesselation/)
 
 Using only the built in method for setting an individual pixel to a color I implemented:
 - Bresenham's Line algorithm to draw a line from one pixel to another.
