@@ -22,7 +22,7 @@ This is a collection of projects and assignments I did while getting my CS bache
 ### Computer Security
 #### [Encryption and Decryption](./Computer%20Security/Encryption%20and%20Decryption/README.md)
 
-A comparison of AES-ECB and AES-CBC encryption modes, and implementation of a key generation algortihm for symmetric encryption/decryption.
+A comparison of AES-ECB and AES-CBC encryption modes, and implementation of a key generation algortihm for symmetric encryption/decryption with RSA.
 #### [Buffer Overflow Attack](./Computer%20Security/Buffer%20Overflow%20Attack/README.md)
 
 A writeup about performing a buffer oveflow attack on a program to achive a root shell.
