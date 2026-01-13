@@ -47,7 +47,7 @@ In contrast, using CBC makes the entire image 'noise', preventing you from learn
 This is becasue CBC doesn't apply the exact same encryption operation to each block, instead the encryption of the current block relies on the previous block, hence the name 'Chained Block Cipher'.
 This results in identical plaintext blocks having different results as ciphertext.
 
-### Task 2: Calculating Keys
+### Task 2: Calculating Keys for RSA
 
 Using the following code:
 
