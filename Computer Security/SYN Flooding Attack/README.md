@@ -1,7 +1,4 @@
 
-#### Ryan Dotzlaw
-
-Do Tasks 1.2 and 1.3
 
 
 #### Preamble:
@@ -28,13 +25,13 @@ Firstly, we need to set up the docker containers for our attacker and our victim
 
 Once we put the `labsetup.zip` on the VM, we can use the `dcbuild` and `dcup` commands to build and start the containers.
 
-![](1.png)
+![](1.PNG)
 
 As we can see, we have two user containers, a victim container, and an attacker container.
 
 Then we compile the attack program on our virtual machine. 
 
-![](2.png)
+![](2.PNG)
 
 We put the compiled program into the `volumes` folder in the `labsetup` directory.
 This allows the attacker container to access it, since it is configured to mount the `volumes` folder.
@@ -47,7 +44,7 @@ After some time, we use `netstat` on the victim container to check the TCP conne
 
 These are the connections where the victim machine is waiting to time out on.
 
-![](4.png)
+![](4.PNG)
 
 We can see that there are 97 half-active connections with the `SYN_RECV` state.
 
@@ -57,7 +54,7 @@ Using `ip tcp_metrics flush` in the victim machine will remove all records of pr
 
 Then, on our virtual machine, when we try to establish a TCP connection with the victim container via `telnet`, we are unable to.
 
-![](1a.png)
+![](1a.PNG)
 
 This is due to the fact that the connection queue for the victim machine is full, therefore it is unable to establish any more TCP connections until some of them time out.
 
@@ -65,11 +62,11 @@ This is due to the fact that the connection queue for the victim machine is full
 
 Now we re-enable the countermeasures for the victim container.
 
-![](5.png)
+![](5.PNG)
 
 Then we run the attack again, and look at the half-active connections with the `SYN_RECV` state.
 
-![](6.png)
+![](6.PNG)
 
 We can see that there are 128 half-active connections.
 
@@ -78,4 +75,4 @@ I assume this is because when using the countermeasures, theres no need to reser
 
 When we try to connect to the victim container via `telnet`, we can see that we are able to connect even though the attack is ongoing.
 
-![](7.png)
+![](7.PNG)
